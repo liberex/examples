@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="true">
+
+    <jmxConfigurator />
+
+    <property scope="context" name="logDir" value="${server.output.dir}/logs" />
+    <property name="app" value="ssws" />
+
+    <contextName>${app}</contextName>
+
+    <include resource="logback/logback-${app.env}.xml" />
+
+</configuration>
