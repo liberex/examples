@@ -1,5 +1,6 @@
 package com.example.liberex.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -47,7 +48,7 @@ public class AdminServiceImpl extends WebServiceBase implements AdminService {
 
             List<String> beans = getAllBeanNames();
         }
-        catch (Exception e) {
+        catch (NamingException e) {
             logger.error("While executing the program: {}", e);
             logger.debug("Details:", e);
             ResponseBuilder.setError(rs, ErrorUtil.convertExceptionToError(e));

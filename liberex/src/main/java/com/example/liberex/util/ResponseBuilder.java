@@ -18,7 +18,7 @@ public class ResponseBuilder<T extends AbstractResponse> {
         catch (InstantiationException | IllegalAccessException e) {
             AppAssert.isTrue(false, "Could not instantiate object of class " + clasz.getName());
         }
-        builder.rs.withSources(new SystemRef().withType("SSWS")
+        builder.rs.withSources(new SystemRef().withType("WS")
                 .withId(System.getProperty("app.id")));
         return builder;
     }

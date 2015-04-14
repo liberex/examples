@@ -1,5 +1,7 @@
 package com.example.liberex.config;
 
+import java.util.Properties;
+
 import javax.inject.Named;
 
 import org.slf4j.Logger;
@@ -11,16 +13,18 @@ import com.ibm.cics.server.IsCICS;
 public class AppConfig {
     private static final Logger logger = LoggerFactory.getLogger(AppConfig.class);
 
-    public String getVersion() {
-        return "1.0";
-    }
-
     public String getCharSet() {
         String charset = "UTF8";
         if (isCicsEnabled()) {
             return "CP037";
         }
         return charset;
+    }
+    
+    public Properties getOtherProperties() {
+	Properties props = new Properties();
+	props.put("isCicsEnabled", Boolean.toString(isCicsEnabled()));
+	return props;
     }
 
     static public boolean isCicsEnabled() {

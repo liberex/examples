@@ -36,7 +36,7 @@ public class WebServiceBase {
         }
     }
 
-    protected String invokeCicsProgram(String cmd, String input) throws Exception {
+    protected String invokeCicsProgram(String cmd, String input) {
         try {
             byte[] commarea = toByteArray(input);
             Program program = new Program();
