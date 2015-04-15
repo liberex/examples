@@ -9,6 +9,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,8 +17,10 @@ import com.example.liberex.config.AppConfig;
 import com.example.liberex.util.ErrorUtil;
 import com.example.liberex.util.ResponseBuilder;
 import com.example.liberex.xdo.AdminService;
+import com.example.liberex.xdo.CodeMessage;
 import com.example.liberex.xdo.Container;
 import com.example.liberex.xdo.ExecuteProgramResponse;
+import com.example.liberex.xdo.Param;
 import com.ibm.cics.server.Program;
 
 @Path("/funds")
@@ -30,6 +33,31 @@ public class FundResource extends AbstractResource
 
     @Inject
     AdminService adminServiceImpl;
+    
+    static public class FundRequestResponse {
+	public String request = "";
+	public String retCode = "";
+	public String id = "";
+	public String name = "";
+	public String rating = "";
+	public String price = "";
+	public String retComment = "";
+	
+	void add(StringBuffer sb, String f, int size) {
+	    sb.append(StringUtils.rightPad(StringUtils.trimToEmpty(f), size));
+	}
+	String toCommArea() {
+	    StringBuffer sb = new StringBuffer();
+	    add(sb, request, 1);
+	    add(sb, retCode, 2);
+	    add(sb, id, 8);
+	    add(sb, name, 50);
+	    add(sb, rating, 1);
+	    add(sb, price, 15);
+	    add(sb, retComment, 50);
+	    return sb.toString();
+	}
+    }
 
     @GET
     @Path("{id}")
@@ -39,7 +67,10 @@ public class FundResource extends AbstractResource
         ExecuteProgramResponse rs = ResponseBuilder.of(ExecuteProgramResponse.class).build();
         rs.getSources().get(0).setOperation("getFund");
         try {
-            String input = String.format("%8s%20s%20s", id, "", "");
+            FundRequestResponse rq = new FundRequestResponse();
+            rq.request = "R";
+            rq.id = id;
+            String input = rq.toCommArea();
             rs.getContainers().add(new Container()
                     .withName("COMMAREA-IN")
                     .withValue(input)
@@ -59,6 +90,12 @@ public class FundResource extends AbstractResource
                     .withName("COMMAREA-OUT")
                     .withValue(new String(commarea, charSet))
                     );
+        }
+        catch (com.ibm.cics.server.AbendException ae) {
+            ResponseBuilder.setError(rs, new CodeMessage()
+            .withCode(1000)
+            .withMessage(ae.getMessage())
+            .withParams(new Param().withName("ABCODE").withValue(ae.getABCODE())));
         }
         catch (Throwable e) {
             ResponseBuilder.setError(rs, ErrorUtil.convertExceptionToError(e));
@@ -82,7 +119,11 @@ public class FundResource extends AbstractResource
         ExecuteProgramResponse rs = ResponseBuilder.of(ExecuteProgramResponse.class).build();
         rs.getSources().get(0).setOperation("addFund");
         try {
-            String input = String.format("%8s%20s%20s", fundId, fundName, "");
+            FundRequestResponse rq = new FundRequestResponse();
+            rq.request = "C";
+            rq.id = fundId;
+            rq.name = fundName;
+            String input = rq.toCommArea();
             rs.getContainers().add(new Container()
                     .withName("COMMAREA-IN")
                     .withValue(input)
@@ -102,6 +143,12 @@ public class FundResource extends AbstractResource
                     .withName("COMMAREA-OUT")
                     .withValue(new String(commarea, charSet))
                     );
+        }
+        catch (com.ibm.cics.server.AbendException ae) {
+            ResponseBuilder.setError(rs, new CodeMessage()
+            .withCode(1000)
+            .withMessage(ae.getMessage())
+            .withParams(new Param().withName("ABCODE").withValue(ae.getABCODE())));
         }
         catch (Throwable e) {
             ResponseBuilder.setError(rs, ErrorUtil.convertExceptionToError(e));

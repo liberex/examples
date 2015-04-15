@@ -16,7 +16,7 @@ public class AppConfig {
     public String getCharSet() {
         String charset = "UTF8";
         if (isCicsEnabled()) {
-            return System.getProperty("com.ibm.....");
+            return System.getProperty("com.ibm.cics.jvmserver.local.ccsid");
         }
         return charset;
     }
@@ -24,7 +24,7 @@ public class AppConfig {
     public Properties getOtherProperties() {
 	Properties props = new Properties();
 	props.put("isCicsEnabled", Boolean.toString(isCicsEnabled()));
-	props.put("shortDescription", "My App @ 1:07");
+	props.put("shortDescription", "My App @ 5:07");
 	return props;
     }
 
