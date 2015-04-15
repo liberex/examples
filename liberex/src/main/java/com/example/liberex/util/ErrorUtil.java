@@ -76,7 +76,7 @@ public class ErrorUtil {
         return sb.toString();
     }
 
-    static public CodeMessage convertExceptionToError(Exception e) {
+    static public CodeMessage convertExceptionToError(Throwable e) {
         CodeMessage err = null;
         if (e instanceof AppException) {
             AppException ae = (AppException) e;
