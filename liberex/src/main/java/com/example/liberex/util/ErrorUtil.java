@@ -76,7 +76,7 @@ public class ErrorUtil {
         return sb.toString();
     }
 
-    static public CodeMessage convertExceptionToError(Exception e) {
+    static public CodeMessage convertExceptionToError(Throwable e) {
         CodeMessage err = null;
         if (e instanceof AppException) {
             AppException ae = (AppException) e;
@@ -93,7 +93,7 @@ public class ErrorUtil {
             addExceptionDetails(err, e);
         }
         else {
-            err = createError(CONNECTION_ERROR, e.getCause().getMessage());
+            err = createError(CONNECTION_ERROR, e.getMessage());
             addExceptionDetails(err, e);
         }
         return err;

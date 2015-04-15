@@ -16,7 +16,7 @@ public class AppConfig {
     public String getCharSet() {
         String charset = "UTF8";
         if (isCicsEnabled()) {
-            return "CP037";
+            return System.getProperty("com.ibm.....");
         }
         return charset;
     }

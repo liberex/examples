@@ -17,6 +17,7 @@ public class RestApplication extends Application {
     public Set<Class<?>> getClasses() {
         Set<Class<?>> serviceClasses = new HashSet<Class<?>>();
         serviceClasses.add(AppResource.class);
+        serviceClasses.add(FundResource.class);
         return serviceClasses;
     }
 

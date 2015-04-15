@@ -1,6 +1,5 @@
 package com.example.liberex.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -86,7 +85,7 @@ public class AdminServiceImpl extends WebServiceBase implements AdminService {
                     && rq.getContainers().get(0).getName() == "COMMAREA") {
                 // this is a COMMAREA request
                 String input = rq.getContainers().get(0).getValue();
-                String output = invokeCicsProgram(rq.getProgram().getName(), input);
+                String output = invokeCicsProgram(rq.getProgram().getName(), input, appConfig.getCharSet());
                 rs.getContainers().add(new Container().withValue(output));
             }
             else {
