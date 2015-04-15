@@ -93,7 +93,7 @@ public class ErrorUtil {
             addExceptionDetails(err, e);
         }
         else {
-            err = createError(CONNECTION_ERROR, e.getCause().getMessage());
+            err = createError(CONNECTION_ERROR, e.getMessage());
             addExceptionDetails(err, e);
         }
         return err;

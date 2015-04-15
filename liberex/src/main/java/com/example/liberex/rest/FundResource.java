@@ -37,6 +37,7 @@ public class FundResource extends AbstractResource
     public Response getFund(@PathParam("id") String id) {
         logger.debug("Started getFund");
         ExecuteProgramResponse rs = ResponseBuilder.of(ExecuteProgramResponse.class).build();
+        rs.getSources().get(0).setOperation("getFund");
         try {
             String input = String.format("%8s%20s%20s", id, "", "");
             rs.getContainers().add(new Container()
@@ -60,18 +61,51 @@ public class FundResource extends AbstractResource
                     );
         }
         catch (Throwable e) {
-            ErrorUtil.convertExceptionToError(e);
+            ResponseBuilder.setError(rs, ErrorUtil.convertExceptionToError(e));
         }
 
         return Response.ok(rs).build();
     }
 
+    /**
+     * This will be replaced with POST. It is GET now to simplify testing.
+     * @param fundId
+     * @param fundName
+     * @return
+     */
+
     @GET
     @Path("/add")
     @Produces(MediaType.APPLICATION_XML)
     public Response addFund(@QueryParam("id") String fundId, @QueryParam("nm") String fundName) {
-        logger.debug("Started getFund");
+        logger.debug("Started addFund({}, {})", fundId, fundName);
         ExecuteProgramResponse rs = ResponseBuilder.of(ExecuteProgramResponse.class).build();
+        rs.getSources().get(0).setOperation("addFund");
+        try {
+            String input = String.format("%8s%20s%20s", fundId, fundName, "");
+            rs.getContainers().add(new Container()
+                    .withName("COMMAREA-IN")
+                    .withValue(input)
+                    );
+            String charSet = appConfig.getCharSet();
+            String cmd = "FUNDPROG";
+
+            byte[] commarea = input.getBytes(charSet);
+
+            if (appConfig.isCicsEnabled()) {
+                Program program = new Program();
+                program.setName(cmd);
+                program.link(commarea);
+            }
+            
+            rs.getContainers().add(new Container()
+                    .withName("COMMAREA-OUT")
+                    .withValue(new String(commarea, charSet))
+                    );
+        }
+        catch (Throwable e) {
+            ResponseBuilder.setError(rs, ErrorUtil.convertExceptionToError(e));
+        }
 
         return Response.ok(rs).build();
     }
