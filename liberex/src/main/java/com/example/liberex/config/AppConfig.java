@@ -24,7 +24,7 @@ public class AppConfig {
     public Properties getOtherProperties() {
 	Properties props = new Properties();
 	props.put("isCicsEnabled", Boolean.toString(isCicsEnabled()));
-	props.put("shortDescription", "My App @ 5:07");
+        props.put("shortDescription", "My App @ 4:44");
 	return props;
     }
 

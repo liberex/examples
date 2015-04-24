@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">
+    <display-name>Liberex</display-name>
+
+    <servlet>
+        <servlet-name>REST</servlet-name>
+        <servlet-class>com.ibm.websphere.jaxrs.server.IBMRestServlet</servlet-class>
+        <init-param>
+            <param-name>javax.ws.rs.Application</param-name>
+            <param-value>com.example.liberex.rest.RestApplication</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>REST</servlet-name>
+        <url-pattern>/rs/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet id="AdminService">
+        <servlet-name>AdminService</servlet-name>
+        <servlet-class>com.example.liberex.service.AdminServiceImpl</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>AdminService</servlet-name>
+        <url-pattern>/ws/AdminService</url-pattern>
+    </servlet-mapping>
+
+</web-app>
