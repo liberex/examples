@@ -13,7 +13,7 @@
 
     <servlet-mapping>
         <servlet-name>webapp</servlet-name>
-        <url-pattern>/Hello</url-pattern>
+        <url-pattern>/hello</url-pattern>
     </servlet-mapping>
 
     <security-constraint>
@@ -22,9 +22,6 @@
             <web-resource-name>WRCollection</web-resource-name>
             <url-pattern>/*</url-pattern>
         </web-resource-collection>
-        <auth-constraint>
-            <role-name>ssuser</role-name>
-        </auth-constraint>
     </security-constraint>
 
     <login-config>

@@ -2,6 +2,7 @@ package com.example.liberex;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +27,13 @@ public class HelloServlet extends HttpServlet {
         // Actual logic goes here.
         PrintWriter out = response.getWriter();
 
-        out.println("<h1>Hello @ 1:30</h1>");
+        Principal principal = request.getUserPrincipal();
+
+        if (principal != null) {
+            out.println("<h1>Hello " + principal.getName() + "</h1>");
+        }
+        else {
+            out.println("<h1>Failed Authentication</h1>");
+        }
     }
 }
