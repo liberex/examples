@@ -1,0 +1,30 @@
+<server>
+
+    <!-- Enable features -->
+    <featureManager>
+        <feature>servlet-3.0</feature>
+        <feature>appSecurity-2.0</feature>
+    </featureManager>
+
+    <httpEndpoint host="*" httpPort="9080" httpsPort="-1" id="defaultHttpEndpoint" />
+
+    <basicRegistry>
+        <user name="DEVAB" password="123" />
+    </basicRegistry>
+
+    <webAppSecurity ssoCookieName="SessionId" />
+
+    <applicationMonitor dropins="dropins" dropinsEnabled="true" pollingRate="30s" updateTrigger="polled" />
+
+    <webContainer deferServletLoad="false" />
+
+    <authentication allowHashtableLoginWithIdOnly="false" cacheEnabled="false" />
+
+    <application contextRoot="basic-auth" id="basic-auth" location="basic-auth.war" name="basic-auth">
+        <application-bnd>
+            <security-role name="allAuthenticatedUsers">
+                <special-subject type="ALL_AUTHENTICATED_USERS" />
+            </security-role>
+        </application-bnd>
+    </application>
+</server>

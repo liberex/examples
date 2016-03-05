@@ -13,5 +13,6 @@
 
         <modules>
            <module>101-SystemProperties</module>
+           <module>103-BasicAuth</module>
         </modules>
 </project>

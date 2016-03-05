@@ -1,7 +1,7 @@
 Launching the application in Docker
 ===================================
 
-#Option A - Pass war file as shared volume
+###Option A - WAR file as shared volume
 
 Launch the container
 
@@ -23,12 +23,12 @@ Remove the container
     docker rm -f sysprops1
 
 
-#Option B - Build a new image
+###Option B - Build image containing the WAR file
 
 Build the image
 
     cp ../../../target/sysprops.war .
-    docker build -t=liberex/sysprops
+    docker build -t=liberex/sysprops .
 
 Run the container:
 
