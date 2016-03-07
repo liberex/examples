@@ -8,7 +8,7 @@
 
     <httpEndpoint host="*" httpPort="9080" httpsPort="-1" id="defaultHttpEndpoint" />
 
-    <executor maxThreads="4" />
+    <executor maxThreads="2" />
     <application location="slow-service.war" type="war"/>
 
 </server>
