@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:net.liberex:pc:v1" targetNamespace="urn:net.liberex:pc:v1" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="LoginRequest">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="AbstractRequest"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoginResponse">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="AbstractResponse"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProductDetailsRequest">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="AbstractRequest">
+          <xs:sequence>
+            <xs:element name="ProductCode" type="xs:string"/>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetProductDetailsResponse">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="AbstractResponse">
+          <xs:sequence minOccurs="0">
+            <xs:element name="Product">
+              <xs:complexType>
+                <xs:attribute name="code" type="xs:string"/>
+                <xs:attribute name="description" type="xs:string"/>
+              </xs:complexType>
+            </xs:element>
+          </xs:sequence>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LogoutRequest">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="AbstractRequest"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LogoutResponse">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="AbstractResponse"/>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="AbstractRequest" abstract="true">
+    <xs:attribute name="requestDttm" type="xs:dateTime"/>
+  </xs:complexType>
+  <xs:complexType name="AbstractResponse">
+    <xs:sequence>
+      <xs:element name="Error" minOccurs="0">
+        <xs:complexType>
+          <xs:attribute name="errorCode" type="xs:int" use="required"/>
+          <xs:attribute name="errorMessage" type="xs:string" use="required"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="responseDttm" type="xs:dateTime"/>
+  </xs:complexType>
+</xs:schema>

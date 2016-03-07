@@ -1,0 +1,5 @@
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <LogoutRequest xmlns="urn:net.liberex:pc:v1" />
+    </S:Body>
+</S:Envelope>

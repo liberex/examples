@@ -1,0 +1,7 @@
+<S:Envelope xmlns:S="http://schemas.xmlsoap.org/soap/envelope/">
+    <S:Body>
+        <GetProductDetailsRequest xmlns="urn:net.liberex:pc:v1">
+            <ProductCode>ABC</ProductCode>
+        </GetProductDetailsRequest>
+    </S:Body>
+</S:Envelope>
