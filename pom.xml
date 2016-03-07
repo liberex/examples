@@ -14,5 +14,7 @@
         <modules>
            <module>101-SystemProperties</module>
            <module>103-BasicAuth</module>
+           <module>104-WsAuth</module>
+           <module>105-PendingRequests</module>
         </modules>
 </project>
