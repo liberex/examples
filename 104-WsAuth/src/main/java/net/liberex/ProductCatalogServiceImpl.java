@@ -37,21 +37,21 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     public LoginResponse login(LoginRequest rq) {
         LoginResponse rs = new LoginResponse();
 
-        HttpServletRequest httpRequest = httpRequest();
+            HttpServletRequest httpRequest = httpRequest();
 
-        Principal principal = httpRequest.getUserPrincipal();
-        logger.debug("Principal: {}", principal);
+            Principal principal = httpRequest.getUserPrincipal();
+            logger.debug("Principal: {}", principal);
 
-        if (principal == null) {
-            // The user could not be authenticated, but we still got control and can
-            //  add details of why the user could not be authenticated
-
-            httpResponse().setStatus(HttpServletResponse.SC_FORBIDDEN);
+            if (principal == null) {
+                // The user could not be authenticated, but we still got control and can
+                //  add details about why the user could not be authenticated
 
             AbstractResponse.Error err = new AbstractResponse.Error();
             err.setErrorCode(1001);
+            err.setErrorMessage("User failed to be authenticated. Details ... ");
             rs.setError(err);
-        }
+            return rs;
+            }
 
         return rs;
     }
@@ -62,9 +62,9 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 
         Principal principal = httpRequest().getUserPrincipal();
         if (principal == null) {
-            httpResponse().setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             AbstractResponse.Error err = new AbstractResponse.Error();
             err.setErrorCode(1001);
+            err.setErrorMessage("Request not authenticated");
             rs.setError(err);
             return rs;
         }

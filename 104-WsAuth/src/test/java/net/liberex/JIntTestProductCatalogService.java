@@ -7,7 +7,10 @@ import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import net.liberex.xdo.pc.AbstractResponse.Error;
 import net.liberex.xdo.pc.GetProductDetailsRequest;
 import net.liberex.xdo.pc.GetProductDetailsResponse;
 import net.liberex.xdo.pc.LoginRequest;
@@ -18,6 +21,7 @@ import net.liberex.xdo.pc.ProductCatalogService;
 import net.liberex.xdo.pc.ProductCatalogServiceFactory;
 
 public class JIntTestProductCatalogService {
+    private static final Logger logger = LoggerFactory.getLogger(JIntTestProductCatalogService.class);
 
     String pcUrl = "http://localhost:19090/ws-auth";
 
@@ -33,6 +37,12 @@ public class JIntTestProductCatalogService {
         return svc;
     }
 
+    void removeUsernameAndPassword(ProductCatalogService svc) {
+        BindingProvider bd = (BindingProvider) svc;
+        bd.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, null);
+        bd.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, null);
+    }
+
     @Test
     public void loginSuccess() {
         ProductCatalogService svc = getProductCatalogService(pcUrl, "DEVAB", "123");
@@ -42,6 +52,8 @@ public class JIntTestProductCatalogService {
             LoginResponse rs = svc.login(rq);
             assertNull(rs.getError());
         }
+
+        removeUsernameAndPassword(svc);
 
         {
             GetProductDetailsRequest rq = new GetProductDetailsRequest();
@@ -67,11 +79,15 @@ public class JIntTestProductCatalogService {
             assertNotNull(rs.getError());
         }
 
+        removeUsernameAndPassword(svc);
+
         {
             GetProductDetailsRequest rq = new GetProductDetailsRequest();
             rq.setProductCode("ABC");
             GetProductDetailsResponse rs = svc.getProductDetails(rq);
-            assertNotNull(rs.getError());
+            Error err = rs.getError();
+            assertNotNull(err);
+            logger.debug("Error: {}/{}", err.getErrorCode(), err.getErrorMessage());
         }
 
         {
