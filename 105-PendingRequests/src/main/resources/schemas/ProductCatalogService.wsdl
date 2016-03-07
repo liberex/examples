@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="ProductCatalogService" xmlns:pc="urn:net.liberex:pc:v1"
+    targetNamespace="urn:net.liberex:pc:v1">
+    <wsdl:types>
+        <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="urn:net.liberex:pc:v1" schemaLocation="ProductCatalog.xsd" />
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="GetProductDetailsRequest">
+        <wsdl:part element="pc:GetProductDetailsRequest" name="GetProductDetailsRequest">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="GetProductDetailsResponse">
+        <wsdl:part element="pc:GetProductDetailsResponse" name="GetProductDetailsResponse">
+        </wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="ProductCatalogService">
+        <wsdl:operation name="GetProductDetails">
+            <wsdl:input message="pc:GetProductDetailsRequest" name="GetProductDetailsRequest">
+            </wsdl:input>
+            <wsdl:output message="pc:GetProductDetailsResponse" name="GetProductDetailsResponse">
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="ProductCatalogServiceSoap11" type="pc:ProductCatalogService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+        <wsdl:operation name="GetProductDetails">
+            <soap:operation soapAction="urn:net.liberex:pc:v1/GetProductDetails" />
+            <wsdl:input name="GetProductDetailsRequest">
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="GetProductDetailsResponse">
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="ProductCatalogServiceFactory">
+        <wsdl:port binding="pc:ProductCatalogServiceSoap11" name="ProductCatalogServiceSoap11">
+            <soap:address location="http://host/sys/ws" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
