@@ -37,21 +37,23 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     public LoginResponse login(LoginRequest rq) {
         LoginResponse rs = new LoginResponse();
 
-            HttpServletRequest httpRequest = httpRequest();
+        HttpServletRequest httpRequest = httpRequest();
 
-            Principal principal = httpRequest.getUserPrincipal();
-            logger.debug("Principal: {}", principal);
+        Principal principal = httpRequest.getUserPrincipal();
+        logger.debug("Principal: {}", principal);
 
-            if (principal == null) {
-                // The user could not be authenticated, but we still got control and can
-                //  add details about why the user could not be authenticated
+        if (principal == null) {
+            // The user could not be authenticated, but we still got control and can
+            //  add details about why the user could not be authenticated
 
             AbstractResponse.Error err = new AbstractResponse.Error();
             err.setErrorCode(1001);
             err.setErrorMessage("User failed to be authenticated. Details ... ");
             rs.setError(err);
             return rs;
-            }
+        }
+
+        // Successful authentication. Populate other fields in the response such as the security level.
 
         return rs;
     }
