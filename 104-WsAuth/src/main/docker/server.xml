@@ -16,10 +16,18 @@
 
     <webAppSecurity ssoCookieName="SessionId" />
 
-    <applicationMonitor dropins="dropins" dropinsEnabled="true" pollingRate="30s" updateTrigger="polled" />
+    <applicationMonitor dropins="dropins" dropinsEnabled="false" pollingRate="30s" updateTrigger="polled" />
 
     <webContainer deferServletLoad="false" />
 
     <authentication allowHashtableLoginWithIdOnly="false" cacheEnabled="false" />
+
+    <application contextRoot="ws-auth" id="ws-auth" location="ws-auth.war" name="ws-auth">
+        <application-bnd>
+            <security-role name="allAuthenticatedUsers">
+                <special-subject type="ALL_AUTHENTICATED_USERS" />
+            </security-role>
+        </application-bnd>
+    </application>
 
 </server>

@@ -5,8 +5,8 @@ Docker Configuration for ws-auth Example
 
 Build the image
 
-    cp ../../../target/ws-auth.war .
-    docker build -t=liberex:ws-auth .
+    cp target/ws-auth.war src/main/docker
+    docker build -t=liberex:ws-auth src/main/docker
 
 Run the container:
 

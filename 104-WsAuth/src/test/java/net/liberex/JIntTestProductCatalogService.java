@@ -23,7 +23,7 @@ import net.liberex.xdo.pc.ProductCatalogServiceFactory;
 public class JIntTestProductCatalogService {
     private static final Logger logger = LoggerFactory.getLogger(JIntTestProductCatalogService.class);
 
-    String pcUrl = "http://localhost:19090/ws-auth";
+    String pcUrl = "http://localhost:9090/ws-auth";
 
     ProductCatalogService getProductCatalogService(String url, String userId, String password) {
         ProductCatalogServiceFactory factory = new ProductCatalogServiceFactory(null,
