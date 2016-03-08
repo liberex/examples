@@ -7,6 +7,7 @@ import javax.xml.ws.BindingProvider;
 
 import org.databene.contiperf.PerfTest;
 import org.databene.contiperf.junit.ContiPerfRule;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,16 +22,25 @@ import net.liberex.xdo.pc.ProductCatalogServiceFactory;
 public class JPerfTestProductCatalogService {
     private static final Logger logger = LoggerFactory.getLogger(JPerfTestProductCatalogService.class);
 
-    static String SVC_URL = "http://localhost:9090/slow-service";
-    private static ProductCatalogService svc = null;
+    static String svcUrl = "http://localhost:9090/slow-service";
+    private ProductCatalogService svc = null;
 
     @BeforeClass
     static public void setupClass() {
+        String urlProp = System.getProperty("svc.url");
+        if (urlProp != null) {
+            svcUrl = urlProp;
+        }
+    }
+
+    @Before
+    public void setup() {
+        logger.debug("Starting test connecting to url: {}", svcUrl);
         ProductCatalogServiceFactory factory = new ProductCatalogServiceFactory(null,
                 new QName("urn:net.liberex:pc:v1", "ProductCatalogServiceFactory"));
         svc = factory.getProductCatalogServiceSoap11();
         BindingProvider bd = (BindingProvider) svc;
-        bd.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, SVC_URL + "/ProductCatalogService");
+        bd.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, svcUrl + "/ProductCatalogService");
     }
 
     @Rule

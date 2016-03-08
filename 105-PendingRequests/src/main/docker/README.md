@@ -16,6 +16,8 @@ Test Deployment:
 
     curl -v http://192.168.99.100:85/slow-service/index.html
     curl -v http://192.168.99.100:85/slow-service/ProductCatalogService?wsdl
+    
+    mvn -Djtest=**/JPerfTest* -Dsvc.url=http://192.168.99.100:85/slow-service test
 
 Stop the container:
 

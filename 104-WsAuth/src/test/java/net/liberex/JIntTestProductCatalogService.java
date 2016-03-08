@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNull;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +24,18 @@ import net.liberex.xdo.pc.ProductCatalogServiceFactory;
 public class JIntTestProductCatalogService {
     private static final Logger logger = LoggerFactory.getLogger(JIntTestProductCatalogService.class);
 
-    String pcUrl = "http://localhost:9090/ws-auth";
+    static String svcUrl = "http://localhost:9090/ws-auth";
+
+    @BeforeClass
+    public static void setupClass() {
+        String urlProp = System.getProperty("svc.url");
+        if (urlProp != null) {
+            svcUrl = urlProp;
+        }
+    }
 
     ProductCatalogService getProductCatalogService(String url, String userId, String password) {
+        logger.debug("Connecting to url: {}", url);
         ProductCatalogServiceFactory factory = new ProductCatalogServiceFactory(null,
                 new QName("urn:net.liberex:pc:v1", "ProductCatalogServiceFactory"));
         ProductCatalogService svc = factory.getProductCatalogServiceSoap11();
@@ -45,7 +55,7 @@ public class JIntTestProductCatalogService {
 
     @Test
     public void loginSuccess() {
-        ProductCatalogService svc = getProductCatalogService(pcUrl, "DEVAB", "123");
+        ProductCatalogService svc = getProductCatalogService(svcUrl, "DEVAB", "123");
 
         {
             LoginRequest rq = new LoginRequest();
@@ -71,7 +81,7 @@ public class JIntTestProductCatalogService {
 
     @Test
     public void loginFailed() {
-        ProductCatalogService svc = getProductCatalogService(pcUrl, "DEVAB", "badpass");
+        ProductCatalogService svc = getProductCatalogService(svcUrl, "DEVAB", "badpass");
 
         {
             LoginRequest rq = new LoginRequest();

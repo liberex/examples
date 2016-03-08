@@ -3,13 +3,13 @@ Web Services with Authentication
 
 ### Build the application
 
-mvn package
+Use maven:
+
+    mvn package
 
 ### Deploy in the container
 
-Package as a docker container. Details [here](src/main/docker/README.md)
-
-In the rest of this document 192.168.99.100:84 is the ip/port for the docker container.
+Instructions for packaging the application in a Docker container are in the [README](src/main/docker/README.md) file.
 
 ###Test 1 - Successful authentication
 
