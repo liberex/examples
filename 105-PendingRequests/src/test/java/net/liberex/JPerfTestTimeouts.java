@@ -22,9 +22,7 @@ import net.liberex.xdo.pc.ProductCatalogServiceFactory;
 public class JPerfTestTimeouts {
     private static final Logger logger = LoggerFactory.getLogger(JPerfTestTimeouts.class);
 
-    static String svcUrl1 = "http://localhost:9090/slow-service";
-    static String svcUrl2 = "http://192.168.99.100:85/slow-service";
-    static String svcUrl = svcUrl2;
+    static String svcUrl = "http://localhost:9090/slow-service";
 
     private ProductCatalogService svc = null;
 
@@ -52,12 +50,12 @@ public class JPerfTestTimeouts {
 
     @Test
     public void getProductCatalogDetails() {
-        GetProductDetailsRequest rq = new GetProductDetailsRequest();
-        rq.setProductCode("ABC");
-
         for (int i = 0; i < 3; i++) {
             long start = System.currentTimeMillis();
             try {
+                GetProductDetailsRequest rq = new GetProductDetailsRequest();
+                rq.setProductCode("ABC");
+                logger.debug("Sending request {} for product code: {}", i, rq.getProductCode());
                 GetProductDetailsResponse rs = svc.getProductDetails(rq);
                 assertNull(rs.getError());
             }

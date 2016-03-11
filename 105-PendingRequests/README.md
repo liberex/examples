@@ -39,7 +39,26 @@ when the original issue is resolved.
 
 ### Handling Client Timeouts
 
-The unit-test class [JPerfTestTimeouts](src/test/java/net/liberex/JPerfTestTimeouts.java) runs three requests with a timeout defined to 500ms. The server has a processing time of 5 seconds and maximum 2 threads. These are the steps:
+The unit-test class [JPerfTestTimeouts](src/test/java/net/liberex/JPerfTestTimeouts.java) runs three requests with a timeout after 500ms. The server has a processing time of 5 seconds and maximum 2 threads.
+
+
+The following are the interleaved logs from client and server:
+
+	C> 10:34:53.730,DEBUG,main,n.l.JPerfTestTimeouts,Starting test connecting to url: http://localhost:9090/slow-service
+	C> 10:34:53.938,DEBUG,main,n.l.JPerfTestTimeouts,Sending request for product code: ABC
+	S< 10:34:53.974,DEBUG,Default Executor-thread-2,n.l.SlowProductCatalogServiceImpl,Received request for product code: ABC
+	C> 10:34:54.469,DEBUG,main,n.l.JPerfTestTimeouts,Exception main received after: 531ms
+	C> 10:34:54.675,DEBUG,main,n.l.JPerfTestTimeouts,Sending request for product code: ABC
+	S< 10:34:54.692,DEBUG,Default Executor-thread-1,n.l.SlowProductCatalogServiceImpl,Received request for product code: ABC
+	C> 10:34:55.182,DEBUG,main,n.l.JPerfTestTimeouts,Exception main received after: 507ms
+	C> 10:34:55.386,DEBUG,main,n.l.JPerfTestTimeouts,Sending request for product code: ABC
+	C> 10:34:55.891,DEBUG,main,n.l.JPerfTestTimeouts,Exception main received after: 505ms
+	S< 10:34:58.979,DEBUG,Default Executor-thread-2,n.l.SlowProductCatalogServiceImpl,Send response after 5005ms
+	S< 10:34:59.002,DEBUG,Default Executor-thread-2,n.l.SlowProductCatalogServiceImpl,Received request for product code: ABC
+	S< 10:34:59.698,DEBUG,Default Executor-thread-1,n.l.SlowProductCatalogServiceImpl,Send response after 5005ms
+	S< 10:35:04.005,DEBUG,Default Executor-thread-2,n.l.SlowProductCatalogServiceImpl,Send response after 5003ms
+    
+ This is a description of the events:
  
   * 0ms - Client sends the request 1
   * 10ms - Server receives the request 1 starts processing in thread 1
@@ -50,16 +69,20 @@ The unit-test class [JPerfTestTimeouts](src/test/java/net/liberex/JPerfTestTimeo
   * 1400ms - Client sends request 3. There are no servers available but the server reads the request and keeps it in a queue
   * 1900ms - Client times out on request 3.
   * 5000ms - Server completes the execution of request 1. The TCP connection is closed, response dropped
-  * 10000ms - Server completes the execution of request 2. The TCP/IP connection is closed, response dropped
-  * 10010ms - Server receives the request 3 which was in the pending queue
-  * 15000ms - Server completes request 3 and drops the response because the TCP/IP connection is closed
+  * 57000ms - Server completes the execution of request 2. The TCP/IP connection is closed, response dropped
+  * 5710ms - Server receives the request 3 which was in the pending queue
+  * 10700ms - Server completes request 3 and drops the response because the TCP/IP connection is closed
 
-  
-
-
-
-The TCP dump for this request is in the file [client-timeout.pcap](src/test/data/out/client-timeout.pcap). To read its content:
+The TCP dump for this request is saved in the file [client-timeout.pcap](src/test/data/out/client-timeout.pcap). To read its content:
 
     tcpdump -r src/test/data/out/client-timeout.pcap
-    
-    
+
+The conclusions are:
+
+ * the client closes the TCP/IP connection on timeout (sends FIN) and opens a new one for the next request (SYN)
+ * the server acknowledges that the connection closes (sends ACK) but does not stop the threads or remove the pending requests
+ 
+
+  
+ 
+ 
