@@ -15,10 +15,9 @@ Use maven:
 
 Instructions for packaging the application in a Docker container are in the [README](src/main/docker/README.md) file.
 
-### Behavior under load
+### Behavior Under Load
 
-The unit-test class JPerfTestProductCatalogService can send multiple requests in parallel. The checked in configuration
-sends a burst of 10 requests at the same time.
+The unit-test class [JPerfTestProductCatalogService](src/test/java/net/liberex/JPerfTestProductCatalogService.java) sends a burst of 10 requests in parallel.
 
 The server is configured with maxTreads = 2. See [server.xml](src/main/docker/server.xml).
 
@@ -35,6 +34,32 @@ The following log entries show that the server queues the requests and allocates
 	12:07:02.107 [Thread-2] DEBUG n.l.JIntTestProductCatalogService - Thread: Thread-2, response time: 25288
 	12:07:02.107 [Thread-3] DEBUG n.l.JIntTestProductCatalogService - Thread: Thread-3, response time: 25288
 
-The side-effect of this behavior is that when the server slows down and the client retries frequently the server
-cannot recover even when the original issue is resolved.
+Note that when the server slows down and the client retries frequently the server cannot recover even 
+when the original issue is resolved.
 
+### Handling Client Timeouts
+
+The unit-test class [JPerfTestTimeouts](src/test/java/net/liberex/JPerfTestTimeouts.java) runs three requests with a timeout defined to 500ms. The server has a processing time of 5 seconds and maximum 2 threads. These are the steps:
+ 
+  * 0ms - Client sends the request 1
+  * 10ms - Server receives the request 1 starts processing in thread 1
+  * 500ms - Client times out, sends FIN packet over TCP. Server keeps processing this request 
+  * 700ms - Client sends request 2
+  * 710ms - Server receives the request to and starts processing in thread 2
+  * 1200ms - Client times out, sends FIN packet over TCP. Server keeps processing requsts 1 and 2
+  * 1400ms - Client sends request 3. There are no servers available but the server reads the request and keeps it in a queue
+  * 1900ms - Client times out on request 3.
+  * 5000ms - Server completes the execution of request 1. The TCP connection is closed, response dropped
+  * 10000ms - Server completes the execution of request 2. The TCP/IP connection is closed, response dropped
+  * 10010ms - Server receives the request 3 which was in the pending queue
+  * 15000ms - Server completes request 3 and drops the response because the TCP/IP connection is closed
+
+  
+
+
+
+The TCP dump for this request is in the file [client-timeout.pcap](src/test/data/out/client-timeout.pcap). To read its content:
+
+    tcpdump -r src/test/data/out/client-timeout.pcap
+    
+    

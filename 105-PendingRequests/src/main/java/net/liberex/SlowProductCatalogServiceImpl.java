@@ -21,6 +21,8 @@ public class SlowProductCatalogServiceImpl implements ProductCatalogService {
 
     @Override
     public GetProductDetailsResponse getProductDetails(GetProductDetailsRequest rq) {
+        logger.debug("Received request for product code: {}", rq.getProductCode());
+        long start = System.currentTimeMillis();
         GetProductDetailsResponse rs = new GetProductDetailsResponse();
 
         GetProductDetailsResponse.Product prod = new GetProductDetailsResponse.Product();
@@ -34,6 +36,8 @@ public class SlowProductCatalogServiceImpl implements ProductCatalogService {
         catch (InterruptedException e) {
             logger.debug("Interrupted thread: {}, {}", Thread.currentThread().getName(), e.getMessage());
         }
+
+        logger.debug("Send response after {}ms", System.currentTimeMillis() - start);
 
         return rs;
     }

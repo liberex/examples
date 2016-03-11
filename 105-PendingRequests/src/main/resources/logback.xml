@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+
+    <property name="app" value="liberex" />
+    <property file="${app.config.dir}/${app}-logging.properties" />
+
+    <property scope="context" name="logger.pattern" value="%d{HH:mm:ss.SSS},%level,%thread,%c{20},%msg%n%rEx{8}" />
+
+    <contextName>${app}</contextName>
+
+    <appender name="ROLLING_FILE_DAILY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${logger.file.level:-DEBUG}</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logger.file.dir:-.}/${CONTEXT_NAME}.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${logger.file.maxHistory:-7}</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>${logger.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${logger.console.level:-DEBUG}</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
+            <pattern>${logger.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- The level is filtered in the appenders -->
+    <logger name="net.liberex" level="DEBUG" />
+
+    <root level="ERROR">
+        <appender-ref ref="ROLLING_FILE_DAILY" />
+        <appender-ref ref="CONSOLE" />
+    </root>
+
+</configuration>

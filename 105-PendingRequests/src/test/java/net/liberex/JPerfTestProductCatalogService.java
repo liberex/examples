@@ -47,7 +47,7 @@ public class JPerfTestProductCatalogService {
     public ContiPerfRule i = new ContiPerfRule();
 
     @Test
-    @PerfTest(invocations = 10, threads = 10)
+    @PerfTest(invocations = 1000, threads = 100)
     public void getProductCatalogDetails() {
         long start = System.currentTimeMillis();
         GetProductDetailsRequest rq = new GetProductDetailsRequest();
